@@ -12,6 +12,6 @@ client = RegistryClient(host=host)
 
 templateName, versionName = client.upload_pipeline(
   file_name="hello_world_pipeline.yaml",
-  tags=[os.environ.get("SHORT_SHA", "latest"), "prod"],
+  tags=[os.environ.get("SHORT_SHA", "latest")],
   extra_headers={"description":"This is an example pipeline template."})
 
