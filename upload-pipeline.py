@@ -18,6 +18,6 @@ sha256 = sha256sum(source_name)
 
 templateName, versionName = client.upload_pipeline(
   file_name=pipe_name,
-  tags=["feat-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ"), "source:"+sha256],
+  tags=["feat-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"), "source:"+sha256, os.environ.get("BRANCH_NAME").replace("/", "-")],
   extra_headers={"description":"This is an example pipeline template."})
 
