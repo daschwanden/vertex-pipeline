@@ -12,7 +12,7 @@ project_id = os.environ.get("PROJECT_ID", "")
 host = "https://"+region+"-kfp.pkg.dev/"+project_id+"/"+repo_name
 client = RegistryClient(host=host)
 
-source_name = "hello_world_pipeline.py"
+source_name = "hello-world-pipeline.py"
 pipe_name = "hello_world_pipeline.yaml"
 sha256 = sha256sum(source_name)
 
