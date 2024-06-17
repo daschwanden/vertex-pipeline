@@ -4,6 +4,7 @@
 import os
 import datetime
 from kfp.registry import RegistryClient
+from sha256sum import sha256sum
 
 region = os.environ.get("_REGION", "")
 repo_name = os.environ.get("REPO_NAME", "")
@@ -11,9 +12,12 @@ project_id = os.environ.get("PROJECT_ID", "")
 host = "https://"+region+"-kfp.pkg.dev/"+project_id+"/"+repo_name
 client = RegistryClient(host=host)
 
+file_name = "hello_world_pipeline.yaml",
+sha256 = sha256sum(file_name)
+
 templateName, versionName = client.upload_pipeline(
-  file_name="hello_world_pipeline.yaml",
-  tags=["feat:"+os.environ.get("SHORT_SHA", "latest"), "feat:"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")],
+  file_name=file_name,
+  tags=["feat:"+os.environ.get("SHORT_SHA", "latest")+":"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ"), "pipe:"+sha256],
   #tags=[os.environ.get("SHORT_SHA", "latest"), os.environ.get("BRANCH_NAME", ""), "feat:"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")],
   extra_headers={"description":"This is an example pipeline template."})
 
