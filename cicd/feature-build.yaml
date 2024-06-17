@@ -20,7 +20,7 @@ steps:
     pip3 install kfp && \
     pip3 install sha256sum && \
     python3 hello-world-pipeline.py && \
-    python3 upload-pipeline.py
+    python3 script/upload-pipeline.py
 substitutions:
   _REGION: europe-west2
 options:
