@@ -19,5 +19,9 @@ tag = client.get_tag(package_name="hello-world", tag=source_sha256)
 
 version = tag["version"].rsplit('/').pop()
 
-tag = client.create_tag(package_name="hello-world", version=version, tag="dev")
+try:
+  tag = client.create_tag(package_name="hello-world", version=version, tag="dev")
+except:
+  print("dev tag is already on this verion")
+
 tag = client.create_tag(package_name="hello-world", version=version, tag="dev-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ"))
