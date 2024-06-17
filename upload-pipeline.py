@@ -12,7 +12,7 @@ project_id = os.environ.get("PROJECT_ID", "")
 host = "https://"+region+"-kfp.pkg.dev/"+project_id+"/"+repo_name
 client = RegistryClient(host=host)
 
-file_name = "hello_world_pipeline.yaml",
+file_name = "hello_world_pipeline.yaml"
 sha256 = sha256sum(file_name)
 
 templateName, versionName = client.upload_pipeline(
