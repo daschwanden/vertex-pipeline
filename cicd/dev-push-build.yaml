@@ -13,6 +13,7 @@ steps:
   script: |
     #!/bin/bash
     echo "hello from push-to-dev"
+    python3 script/dev-promote-pipeline.py
 substitutions:
   _REGION: europe-west2
 options:
