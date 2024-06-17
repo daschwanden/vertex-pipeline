@@ -13,11 +13,11 @@ host = "https://"+region+"-kfp.pkg.dev/"+project_id+"/"+repo_name
 client = RegistryClient(host=host)
 
 source_name = "hello-world-pipeline.py"
-pipe_name = "hello_world_pipeline.yaml"
-sha256 = sha256sum(source_name)
+source_sha256 = "source:"+sha256sum(source_name)
 
-templateName, versionName = client.upload_pipeline(
-  file_name=pipe_name,
-  tags=[os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"), "source:"+sha256],
-  extra_headers={"description":"This is an example pipeline template."})
+tag = client.get_tag(package_name="hello-world", tag=source_sha256)
 
+version = tag["version"].rsplit('/').pop()
+
+tag = client.create_tag(package_name="hello-world", version=version, tag="dev")
+tag = client.create_tag(package_name="hello-world", version=version, tag="dev-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ"))
