@@ -26,7 +26,7 @@ host = "https://"+region+"-kfp.pkg.dev/"+project_id+"/"+repo_name
 client = RegistryClient(host=host)
 
 source_name = "pipeline.py"
-compiled_name = package+".yaml"
+compiled_name = "pipeline.yaml"
 sha256 = sha256sum(source_name)
 
 templateName, versionName = client.upload_pipeline(

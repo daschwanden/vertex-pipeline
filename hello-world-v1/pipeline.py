@@ -18,4 +18,4 @@ def pipeline_hello_world(text: str = 'hi there, new world'):
 
 compiler.Compiler().compile(
     pipeline_func=pipeline_hello_world,
-    package_path='hello_world_pipeline.yaml')
+    package_path='pipeline.yaml')
