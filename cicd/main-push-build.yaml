@@ -22,6 +22,7 @@ steps:
     git status
     echo "COMMIT_SHA: ${COMMIT_SHA}"
     echo "-------------------"
+    git fetch --depth=2 origin main
     git show --name-only --oneline $COMMIT_SHA
     echo "-------------------"
     echo "Test output:"
