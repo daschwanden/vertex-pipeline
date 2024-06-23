@@ -45,7 +45,11 @@ steps:
     echo "-------------------"
     echo "PACKAGE: ${PACKAGE}"
     echo "-------------------"
-    export SIGNATURE=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py | sed 's/.*(\(.*\)).*/\1/')
+    export PIPELINE_FUNCTION=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py)
+    echo "-------------------"
+    echo "PIPELINE_FUNCTION: ${PIPELINE_FUNCTION}"
+    echo "-------------------"
+    export SIGNATURE=echo $PIPELINE_FUNCTION | sed 's/.*(\(.*\)).*/\1/')
     echo "-------------------"
     echo "SIGNATURE: ${SIGNATURE}"
     echo "-------------------"
