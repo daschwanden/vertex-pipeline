@@ -10,9 +10,10 @@ def hello_world(text: str) -> str:
     return text
 
 @dsl.pipeline(name='hello-world-v1', description='A simple intro pipeline')
-def pipeline_hello_world(text: str = 'hi, new world'):
+def pipeline_hello_world(text: str = ''):
     """Pipeline that passes small pipeline parameter string to consumer op."""
 
+    text = 'Hi new world'
     consume_task = hello_world(
         text=text)  # Passing pipeline parameter as argument to consumer op
 
