@@ -13,6 +13,7 @@ steps:
   script: |
     #!/bin/bash
     echo "hello from pr-main"
+    git branch -m main
     echo "-------------------"
     echo "pwd: $(pwd)"
     echo "-------------------"
