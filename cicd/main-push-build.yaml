@@ -12,7 +12,15 @@ steps:
   automapSubstitutions: true
   script: |
     #!/bin/bash
+    echo "-------------------"
     echo "hello from pr-main"
+    echo "-------------------"
+    apt install -y python3.11-venv && \
+    python3 -m venv env && \
+    source env/bin/activate && \
+    pip3 install google-cloud-aiplatform && \
+    pip3 install kfp && \
+    pip3 install sha256sum
     echo "-------------------"
     echo "pwd: $(pwd)"
     echo "-------------------"
@@ -32,6 +40,8 @@ steps:
     echo "-------------------"
     cd $PIPELINE
     ls -la pipeline.py
+    echo "-------------------"
+    python3 /workspace/scripts/get-pipeline-signature.py
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
