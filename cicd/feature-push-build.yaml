@@ -7,20 +7,58 @@
 steps:
 - name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:slim'
   env:
-  - 'BRANCH_NAME=$BRANCH_NAME'
   - 'REPO_NAME=$REPO_NAME'
   - 'SHORT_SHA=$SHORT_SHA'
   automapSubstitutions: true
   script: |
     #!/bin/bash
+    echo "-------------------"
+    echo "hello from feature-push"
+    echo "-------------------"
     apt install -y python3.11-venv && \
     python3 -m venv env && \
     source env/bin/activate && \
     pip3 install google-cloud-aiplatform && \
     pip3 install kfp && \
-    pip3 install sha256sum && \
-    python3 hello-world-pipeline.py && \
-    python3 script/upload-pipeline.py
+    pip3 install sha256sum
+    echo "-------------------"
+    echo "pwd: $(pwd)"
+    echo "-------------------"
+    ls -la
+    echo "-------------------"
+    git status
+    echo "COMMIT_SHA: ${COMMIT_SHA}"
+    echo "-------------------"
+    echo "--> git fetch:"
+    git fetch --depth=2
+    echo "-------------------"
+    echo "--> git show:"
+    git show --name-only --oneline $COMMIT_SHA
+    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
+    echo "-------------------"
+    echo "PIPELINE: ${PIPELINE}"
+    echo "-------------------"
+    cd $PIPELINE
+    ls -la pipeline.py
+    echo "-------------------"
+    export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
+    echo "-------------------"
+    echo "PACKAGE: ${PACKAGE}"
+    echo "-------------------"
+    export PIPELINE_FUNCTION=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py)
+    echo "-------------------"
+    echo "PIPELINE_FUNCTION: ${PIPELINE_FUNCTION}"
+    echo "-------------------"
+    export SIGNATURE=$(echo $PIPELINE_FUNCTION | sed 's/.*(\(.*\)).*/\1/')
+    echo "-------------------"
+    echo "SIGNATURE: ${SIGNATURE}"
+    echo "-------------------"
+    echo "Compiling pipeline..."
+    python3 pipeline.py
+    echo "-------------------"
+    echo "Uploading pipeline..."
+    /workspace/scripts/upload-pipeline.py
+    echo "-------------------"
 substitutions:
   _REGION: europe-west2
 options:
