@@ -1,0 +1,24 @@
+# Copyright 2024 Google.
+# This software is provided as-is, without warranty or representation for any use or purpose.
+# Your use of it is subject to your agreement with Google.
+#
+# In this directory, run the following command to build this builder.
+# $ gcloud builds submit . --config=cloudbuild.yaml
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:slim'
+  env:
+  - 'REPO_NAME=$REPO_NAME'
+  - 'SHORT_SHA=$SHORT_SHA'
+  automapSubstitutions: true
+  script: |
+    #!/bin/bash
+    apt install -y python3.11-venv && \
+    python3 -m venv env && \
+    source env/bin/activate && \
+    pip3 install kfp && \
+    pip3 install sha256sum && \
+    python3 script/dev-promote-pipeline.py
+substitutions:
+  _REGION: europe-west2
+options:
+  logging: CLOUD_LOGGING_ONLY
