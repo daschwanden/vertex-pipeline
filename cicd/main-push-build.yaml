@@ -13,7 +13,6 @@ steps:
   script: |
     #!/bin/bash
     echo "hello from pr-main"
-    git branch -m main
     echo "-------------------"
     echo "pwd: $(pwd)"
     echo "-------------------"
@@ -22,11 +21,11 @@ steps:
     git status
     echo "COMMIT_SHA: ${COMMIT_SHA}"
     echo "-------------------"
-    git fetch --depth=2 origin main
-    git show --name-only --oneline $COMMIT_SHA
+    echo "--> git fetch:"
+    git fetch --depth=2
     echo "-------------------"
-    echo "Test output:"
-    git show --name-only --oneline ceca5e78fe43ebef9556148b44365918390b2f87
+    echo "--> git show:"
+    git show --name-only --oneline $COMMIT_SHA
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
