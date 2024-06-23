@@ -9,7 +9,7 @@ import hashlib
 
 def hash_signature(signature):
  # Encode the signature as bytes
- signatured_bytes = signature.encode('utf-8')
+ signature_bytes = signature.encode('utf-8')
  # Use SHA-256 hash function to create a hash object
  hash_object = hashlib.sha256(signature_bytes)
  # Get the hexadecimal representation of the hash
@@ -33,4 +33,3 @@ templateName, versionName = client.upload_pipeline(
   file_name=compiled_name,
   tags=[os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"), "source:"+sha256, "signature:"+signature_hash],
   extra_headers={"description":"This is an example pipeline template."})
-
