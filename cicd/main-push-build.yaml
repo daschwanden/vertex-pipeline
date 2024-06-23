@@ -12,12 +12,8 @@ steps:
   automapSubstitutions: true
   script: |
     #!/bin/bash
-    apt install -y python3.11-venv && \
-    python3 -m venv env && \
-    source env/bin/activate && \
-    pip3 install kfp && \
-    pip3 install sha256sum && \
-    python3 script/prod-promote-pipeline.py
+    echo "hello from pr-main"
+    git show --name-only $COMMIT_SHA
 substitutions:
   _REGION: europe-west2
 options:
