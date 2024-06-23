@@ -18,6 +18,11 @@ steps:
     echo "-------------------"
     ls -la
     echo "-------------------"
+    git status
+    echo "COMMIT_SHA: ${COMMIT_SHA}"
+    echo "-------------------"
+    git show --name-only --oneline $COMMIT_SHA
+    echo "-------------------"
 substitutions:
   _REGION: europe-west2
 options:
