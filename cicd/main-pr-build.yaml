@@ -5,7 +5,8 @@
 # In this directory, run the following command to build this builder.
 # $ gcloud builds submit . --config=cloudbuild.yaml
 steps:
-- name: 'gcr.io/google.com/cloudsdktool/google-cloud-cli:slim'
+- id: main-pr-build
+  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   env:
   - 'REPO_NAME=$REPO_NAME'
   - 'SHORT_SHA=$SHORT_SHA'

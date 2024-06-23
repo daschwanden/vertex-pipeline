@@ -5,7 +5,8 @@
 # In this directory, run the following command to build this builder.
 # $ gcloud builds submit . --config=cloudbuild.yaml
 steps:
-- name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
+- id: feature-push-build
+  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   env:
   - 'REPO_NAME=$REPO_NAME'
   - 'SHORT_SHA=$SHORT_SHA'
@@ -13,14 +14,6 @@ steps:
   script: |
     #!/bin/bash
     echo "-------------------"
-    echo "hello from feature-push"
-    #echo "-------------------"
-    #apt install -y python3.11-venv && \
-    #python3 -m venv env && \
-    #source env/bin/activate && \
-    #pip3 install google-cloud-aiplatform && \
-    #pip3 install kfp && \
-    #pip3 install sha256sum
     source /env/bin/activate
     echo "-------------------"
     echo "pwd: $(pwd)"
