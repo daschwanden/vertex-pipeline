@@ -24,7 +24,7 @@ steps:
     echo "-------------------"
     git show --name-only --oneline $COMMIT_SHA
     echo "-------------------"
-  echo "Test output:"
+    echo "Test output:"
     git show --name-only --oneline ceca5e78fe43ebef9556148b44365918390b2f87
     echo "-------------------"
 substitutions:
