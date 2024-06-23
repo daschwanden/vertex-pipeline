@@ -26,6 +26,12 @@ steps:
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
+    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
+    echo "-------------------"
+    echo "PIPELINE: ${PIPELINE}"
+    echo "-------------------"
+    cd $PIPELINE
+    ls -la pipeline.py
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
