@@ -13,7 +13,11 @@ steps:
   script: |
     #!/bin/bash
     echo "hello from pr-main"
-    git show --name-only $COMMIT_SHA
+    echo "-------------------"
+    echo "pwd: $(pwd)"
+    echo "-------------------"
+    ls -la
+    echo "-------------------"
 substitutions:
   _REGION: europe-west2
 options:
