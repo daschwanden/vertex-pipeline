@@ -57,7 +57,7 @@ steps:
     python3 pipeline.py
     echo "-------------------"
     echo "Uploading pipeline..."
-    /workspace/scripts/upload-pipeline.py
+    python3 /workspace/scripts/upload-pipeline.py
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
