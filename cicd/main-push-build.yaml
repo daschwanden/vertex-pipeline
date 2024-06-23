@@ -24,9 +24,8 @@ steps:
     echo "-------------------"
     echo "pwd: $(pwd)"
     echo "-------------------"
-    ls -la
-    echo "-------------------"
     git status
+    echo "-------------------"
     echo "COMMIT_SHA: ${COMMIT_SHA}"
     echo "-------------------"
     echo "--> git fetch:"
@@ -34,26 +33,7 @@ steps:
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
-    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
     echo "-------------------"
-    echo "PIPELINE: ${PIPELINE}"
-    echo "-------------------"
-    cd $PIPELINE
-    ls -la pipeline.py
-    echo "-------------------"
-    export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
-    echo "-------------------"
-    echo "PACKAGE: ${PACKAGE}"
-    echo "-------------------"
-    export PIPELINE_FUNCTION=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py)
-    echo "-------------------"
-    echo "PIPELINE_FUNCTION: ${PIPELINE_FUNCTION}"
-    echo "-------------------"
-    export SIGNATURE=$(echo $PIPELINE_FUNCTION | sed 's/.*(\(.*\)).*/\1/')
-    echo "-------------------"
-    echo "SIGNATURE: ${SIGNATURE}"
-    echo "-------------------"
-    /workspace/scripts/upload-pipeline.py
 substitutions:
   _REGION: europe-west2
 options:
