@@ -29,7 +29,7 @@ steps:
     echo "COMMIT_SHA: ${COMMIT_SHA}"
     echo "-------------------"
     echo "--> git fetch:"
-    git fetch --depth=2
+    git fetch --depth=3
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
