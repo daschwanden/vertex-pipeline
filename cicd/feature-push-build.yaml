@@ -21,7 +21,7 @@ steps:
     #pip3 install google-cloud-aiplatform && \
     #pip3 install kfp && \
     #pip3 install sha256sum
-    source env/bin/activate
+    source /env/bin/activate
     echo "-------------------"
     echo "pwd: $(pwd)"
     echo "-------------------"
