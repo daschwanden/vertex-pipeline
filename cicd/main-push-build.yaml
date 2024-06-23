@@ -41,7 +41,13 @@ steps:
     cd $PIPELINE
     ls -la pipeline.py
     echo "-------------------"
-    sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py
+    export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
+    echo "-------------------"
+    echo "PACKAGE: ${PACKAGE}"
+    echo "-------------------"
+    export SIGNATURE=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py | sed 's/.*(\(.*\)).*/\1/')
+    echo "-------------------"
+    echo "SIGNATURE: ${SIGNATURE}"
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
