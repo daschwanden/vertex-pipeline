@@ -41,7 +41,7 @@ steps:
     cd $PIPELINE
     ls -la pipeline.py
     echo "-------------------"
-    python3 /workspace/scripts/get-pipeline-signature.py
+    sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
