@@ -1,11 +1,12 @@
 # Copyright 2024 Google.
 # This software is provided as-is, without warranty or representation for any use or purpose.
 # Your use of it is subject to your agreement with Google.
-import os
 import datetime
+import hashlib
+import os
+import sys
 from kfp.registry import RegistryClient
 from sha256sum import sha256sum
-import hashlib
 
 # Calcualte the pipeline function signature
 # It is important that the signature remains constant
