@@ -66,7 +66,7 @@ else:
     print("could not retrieve the source tag")
   if not source_tag:
     # Upload the updated version of the pipeline
-    print("uploading a new version of the pipeline: "+package)
+    print("uploading an updated version of the pipeline: "+package)
     packageName, version = client.upload_pipeline(
       file_name=compiled_name,
       tags=[os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"),
