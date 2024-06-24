@@ -43,9 +43,13 @@ firstVersion = False
 
 if len(versions) > 0:
   # In case we have existing versions of the pipeline make sure the signature has not changed
-  signature_tag = client.get_tag(package, signature_sha256)
+  signature_tag = None
+  try:
+    signature_tag = client.get_tag(package, signature_sha256)
+  except:
+    print("could not retrieve the signature tag")
   if not signature_tag:
-    sys.exit("Error message: The pipeline signature has changed! This would break all existing clients.")
+    sys.exit("error: The pipeline signature has changed! This would break all existing clients.")
 else:
  firstVersion = True
 
@@ -60,7 +64,11 @@ if firstVersion:
           signature_sha256],
     extra_headers={"description":"This is an example pipeline template."})
 else:
-  source_tag = client.get_tag(package, source_sha256)
+  source_tag = None
+  try:
+    source_tag = client.get_tag(package, source_sha256)
+  except:
+    print("could not retrieve the source tag")
   if not source_tag:
     # Upload the updated version of the pipeline
     print("Uploading a new version of the pipeline: "+package)
