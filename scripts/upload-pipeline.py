@@ -66,7 +66,7 @@ else:
   try:
     source_tag = client.get_tag(package, source_sha256)
   except:
-    print("could not retrieve the source tag")
+    print("a pipeline with this source tag does not exist yet.")
   if not source_tag:
     # Upload the updated version of the pipeline
     print("uploading an updated version of the pipeline: "+package)
@@ -79,4 +79,5 @@ else:
     tag = client.update_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
     tag = client.update_tag(package, version, signature_sha256)
   else:
-    print("nothing to do, we already have a version of the pipeline: "+package)
+    print("just add the branch tag as we already have a version of the pipeline with the same source: "+package)
+    tag = client.update_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
