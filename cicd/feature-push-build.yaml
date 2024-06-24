@@ -18,9 +18,11 @@ steps:
     echo "-------------------"
     echo "--> git fetch:"
     git fetch --depth=2
+    echo "-------------------"
 - id: set-environment
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   script: |
+    #!/bin/bash
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
@@ -46,12 +48,15 @@ steps:
     echo "-------------------"
     echo "SIGNATURE: ${SIGNATURE}"
     echo ${SIGNATURE} > /workspace/env_signature.txt
+    echo "-------------------"
 - id: confirm-container-location
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   script: |
+    #!/bin/bash
     echo "run container location test"
     export PIPELINE=$(cat /workspace/env_pipeline.txt)
     cd /workspace/${PIPELINE}
+    echo "-------------------"
 - id: upload-pipeline
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   env:
@@ -59,11 +64,12 @@ steps:
   - 'SHORT_SHA=$SHORT_SHA'
   automapSubstitutions: true
   script: |
+    #!/bin/bash
     echo "-------------------"
     echo "Setting env variables..."
     export PACKAGE=$(cat /workspace/env_package.txt)
     export PIPELINE=$(cat /workspace/env_pipeline.txt)
-    export PIPELINE_FUNCTION=$(cat /workspace/env_pipeline_FUNCTION.txt)
+    export PIPELINE_FUNCTION=$(cat /workspace/env_pipeline_function.txt)
     export SIGNATURE=$(cat /workspace/env_signature.txt)
     source /env/bin/activate
     echo "-------------------"
