@@ -78,6 +78,9 @@ steps:
     python3 pipeline.py
     echo "-------------------"
     python3 /workspace/scripts/upload-pipeline.py
+    if [ $? -ne 0 ]; then
+      exit 1
+    fi
     echo "-------------------"
 substitutions:
   _REGION: europe-west2

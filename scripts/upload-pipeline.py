@@ -44,9 +44,12 @@ firstVersion = False
 
 if len(versions) > 0:
   # In case we have existing versions of the pipeline make sure the signature has not changed
-  signature_tag = client.get_tag(package, signature_sha256)
+  try:
+    signature_tag = client.get_tag(package, signature_sha256)
+  except:
+    sys.exit("could not find signature_tag. this means the pipeline signature changed, which would break all existing clients.")
 else:
- firstVersion = True
+  firstVersion = True
 
 if firstVersion:
   # Upload the first version of the pipeline
