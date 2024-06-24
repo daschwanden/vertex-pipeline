@@ -5,7 +5,7 @@
 # In this directory, run the following command to build this builder.
 # $ gcloud builds submit . --config=cloudbuild.yaml
 steps:
-- id: fetch-repository
+- id: feature-push-build
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   env:
   - 'REPO_NAME=$REPO_NAME'
@@ -18,16 +18,12 @@ steps:
     echo "-------------------"
     echo "--> git fetch:"
     git fetch --depth=2
-- id: set-environment
-  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
-  script: |
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
     export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
     echo "-------------------"
     echo "PIPELINE: ${PIPELINE}"
-    echo ${PIPELINE} > /workspace/env_pipeline.txt
     echo "-------------------"
     cd $PIPELINE
     ls -la pipeline.py
@@ -35,39 +31,17 @@ steps:
     export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
     echo "-------------------"
     echo "PACKAGE: ${PACKAGE}"
-    echo ${PACKAGE} > /workspace/env_package.txt
     echo "-------------------"
     export PIPELINE_FUNCTION=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py)
     echo "-------------------"
     echo "PIPELINE_FUNCTION: ${PIPELINE_FUNCTION}"
-    echo ${PIPELINE_FUNCTION} > /workspace/env_pipeline_function.txt
     echo "-------------------"
     export SIGNATURE=$(echo $PIPELINE_FUNCTION | sed 's/.*(\(.*\)).*/\1/')
     echo "-------------------"
     echo "SIGNATURE: ${SIGNATURE}"
-    echo ${SIGNATURE} > /workspace/env_signature.txt
-- id: confirm-container-location
-  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
-  script: |
-    echo "run container location test"
-    export PIPELINE=$(cat /workspace/env_pipeline.txt)
-    cd /workspace/${PIPELINE}
-- id: upload-pipeline
-  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
-  env:
-  - 'REPO_NAME=$REPO_NAME'
-  - 'SHORT_SHA=$SHORT_SHA'
-  automapSubstitutions: true
-  script: |
     echo "-------------------"
-    echo "Setting env variables..."
-    export PACKAGE=$(cat /workspace/env_package.txt)
-    export PIPELINE=$(cat /workspace/env_pipeline.txt)
-    export PIPELINE_FUNCTION=$(cat /workspace/env_pipeline_FUNCTION.txt)
-    export SIGNATURE=$(cat /workspace/env_signature.txt)
     source /env/bin/activate
     echo "-------------------"
-    cd /workspace/${PIPELINE}
     echo "Compiling pipeline..."
     python3 pipeline.py
     echo "-------------------"
