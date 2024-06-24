@@ -80,4 +80,6 @@ else:
     tag = client.update_tag(package, version, signature_sha256)
   else:
     print("just add the branch tag as we already have a version of the pipeline with the same source: "+package)
-    tag = client.update_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
+    version = source_tag["version"].rsplit('/').pop()
+    tag = client_create_tag(package, verson, os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(dddatetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"))
+    tag = client.create_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
