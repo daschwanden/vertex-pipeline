@@ -79,6 +79,6 @@ else:
       extra_headers={"description":"This is an example pipeline template."})
     # Move the tags to the new version
     tag = client.update_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
-    tag = client.update_tag(package, version, signature_256)
+    tag = client.update_tag(package, version, signature_sha256)
   else:
     print("Nothing to do, we already have a version of the pipeline: "+package)
