@@ -26,8 +26,8 @@ steps:
     echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
-    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
     echo "-------------------"
+    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
     echo "PIPELINE: ${PIPELINE}"
     echo ${PIPELINE} > /workspace/env_pipeline.txt
     echo "-------------------"
@@ -35,17 +35,14 @@ steps:
     ls -la pipeline.py
     echo "-------------------"
     export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
-    echo "-------------------"
     echo "PACKAGE: ${PACKAGE}"
     echo ${PACKAGE} > /workspace/env_package.txt
     echo "-------------------"
     export PIPELINE_FUNCTION=$(sed -n '/^@dsl.pipeline/{n;p;}' pipeline.py)
-    echo "-------------------"
     echo "PIPELINE_FUNCTION: ${PIPELINE_FUNCTION}"
     echo ${PIPELINE_FUNCTION} > /workspace/env_pipeline_function.txt
     echo "-------------------"
     export SIGNATURE=$(echo $PIPELINE_FUNCTION | sed 's/.*(\(.*\)).*/\1/')
-    echo "-------------------"
     echo "SIGNATURE: ${SIGNATURE}"
     echo ${SIGNATURE} > /workspace/env_signature.txt
     echo "-------------------"
@@ -53,6 +50,7 @@ steps:
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   script: |
     #!/bin/bash
+    echo "-------------------"
     echo "run container location test"
     export PIPELINE=$(cat /workspace/env_pipeline.txt)
     cd /workspace/${PIPELINE}
@@ -77,6 +75,7 @@ steps:
     echo "Compiling pipeline..."
     python3 pipeline.py
     echo "-------------------"
+    echo "Going to upload pipeline..."
     python3 /workspace/scripts/upload-pipeline.py
     if [ $? -ne 0 ]; then
       exit 1
