@@ -39,7 +39,7 @@ source_sha256 = "source:"+sha256sum(source_name)
 signature_sha256 = "signature:"+hash_signature(signature)
 
 versions = client.list_versions(package)
-firstVersion = false
+firstVersion = False
 
 if len(versions) > 0:
   # In case we have existing versions of the pipeline make sure the signature has not changed
@@ -47,7 +47,7 @@ if len(versions) > 0:
   if not signature_tag:
     sys.exit("Error message: The pipeline signature has changed! This would break all existing clients.")
 else:
- firstVersion = true
+ firstVersion = True
 
 if firstVersion:
   # Upload the first version of the pipeline
