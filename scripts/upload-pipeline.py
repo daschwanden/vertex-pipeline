@@ -50,13 +50,14 @@ if len(versions) > 0:
   except:
     print("could not retrieve the signature tag")
   if not signature_tag:
-    sys.exit("error: The pipeline signature has changed! This would break all existing clients.")
+    print("error: The pipeline signature has changed! This would break all existing clients.")
+    sys.exit(1)
 else:
  firstVersion = True
 
 if firstVersion:
   # Upload the first version of the pipeline
-  print("Uploading the first version of the pipeline: "+package)
+  print("uploading the first version of the pipeline: "+package)
   packageName, version = client.upload_pipeline(
     file_name=compiled_name,
     tags=[os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"),
@@ -72,7 +73,7 @@ else:
     print("could not retrieve the source tag")
   if not source_tag:
     # Upload the updated version of the pipeline
-    print("Uploading a new version of the pipeline: "+package)
+    print("uploading a new version of the pipeline: "+package)
     packageName, version = client.upload_pipeline(
       file_name=compiled_name,
       tags=[os.environ.get("BRANCH_NAME").replace("/", "-")+"-"+datetime.datetime.now(datetime.UTC).strftime("%Y%m%dT%H%M%SZ")+"-"+os.environ.get("SHORT_SHA", "latest"),
@@ -82,4 +83,4 @@ else:
     tag = client.update_tag(package, version, "branch:"+os.environ.get("BRANCH_NAME").replace("/", "-"))
     tag = client.update_tag(package, version, signature_sha256)
   else:
-    print("Nothing to do, we already have a version of the pipeline: "+package)
+    print("nothing to do, we already have a version of the pipeline: "+package)

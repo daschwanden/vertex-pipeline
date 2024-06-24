@@ -50,7 +50,6 @@ steps:
     echo "Compiling pipeline..."
     python3 pipeline.py
     echo "-------------------"
-    echo "Uploading pipeline..."
     python3 /workspace/scripts/upload-pipeline.py
     echo "-------------------"
 substitutions:
