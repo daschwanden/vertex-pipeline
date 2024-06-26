@@ -11,6 +11,25 @@ steps:
   script: |
     #!/bin/bash
     echo "test pipeline"
+- id: set-environment
+  name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
+  script: |
+    #!/bin/bash
+    echo "-------------------"
+    echo "--> git show:"
+    git show --name-only --oneline $COMMIT_SHA
+    echo "-------------------"
+    export PIPELINE=$(git show --name-only --oneline | head -n 2 | tail -n 1 | cut -d '/' -f 1)
+    echo "PIPELINE: ${PIPELINE}"
+    echo ${PIPELINE} > /workspace/env_pipeline.txt
+    echo "-------------------"
+    cd $PIPELINE
+    ls -la pipeline.py
+    echo "-------------------"
+    export PACKAGE=$(grep dsl.pipeline pipeline.py | sed "s/.*name='\(.*\)',.*/\1/")
+    echo "PACKAGE: ${PACKAGE}"
+    echo ${PACKAGE} > /workspace/env_package.txt
+    echo "-------------------"
 - id: create-deploy
   name: 'europe-west2-docker.pkg.dev/oms-maas/containers/pipe-builder'
   env:
