@@ -1,0 +1,52 @@
+apiVersion: skaffold/v4beta7
+kind: Config
+customActions:
+- name: custom-render
+  containers:
+  - name: render
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli@sha256:66e2681aa3099b4e517e4cdcdefff8f2aa45d305007124ccdc09686f6712d018
+    command: ['/bin/bash']
+    args:
+      - '-c'
+      - |-
+        echo $CLOUD_DEPLOY_customTarget_registryProject > manifest.txt
+        echo $CLOUD_DEPLOY_customTarget_registryLocation >> manifest.txt
+        echo $CLOUD_DEPLOY_customTarget_registryPackage >> manifest.txt
+        echo $CLOUD_DEPLOY_customTarget_registryRepository >> manifest.txt
+        echo $CLOUD_DEPLOY_customTarget_pipelineEnvironment >> manifest.txt
+        echo $CLOUD_DEPLOY_customTarget_pipelineVersion >> manifest.txt
+        gsutil cp manifest.txt $CLOUD_DEPLOY_OUTPUT_GCS_PATH/manifest.txt
+        echo {\"resultStatus\": \"SUCCEEDED\", \"manifestFile\": \"$CLOUD_DEPLOY_OUTPUT_GCS_PATH/manifest.txt\"} > results.json
+        gsutil cp results.json $CLOUD_DEPLOY_OUTPUT_GCS_PATH/results.json
+- name: custom-deploy
+  containers:
+  - name: deploy
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli@sha256:66e2681aa3099b4e517e4cdcdefff8f2aa45d305007124ccdc09686f6712d018
+    command: ['/bin/bash']
+    args:
+      - '-c'
+      - |-
+        tagExists=$(gcloud artifacts tags list \
+          --project=${CLOUD_DEPLOY_customTarget_registryProject} \
+          --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
+          --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
+          --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
+          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineEnvironment}" | \
+          grep VERSION | wc -l)
+        if [ $tagExists -eq 0 ]; then
+          gcloud artifacts tags create ${CLOUD_DEPLOY_customTarget_pipelineEnvironment} \
+            --project=${CLOUD_DEPLOY_customTarget_registryProject} \
+            --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
+            --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
+            --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
+            --version=${CLOUD_DEPLOY_customTarget_pipelineVersion}
+        else
+          gcloud artifacts tags update ${CLOUD_DEPLOY_customTarget_pipelineEnvironment} \
+            --project=${CLOUD_DEPLOY_customTarget_registryProject} \
+            --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
+            --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
+            --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
+            --version=${CLOUD_DEPLOY_customTarget_pipelineVersion}
+        fi
+        echo {\"resultStatus\": \"SUCCEEDED\"} > results.json
+        gsutil cp results.json $CLOUD_DEPLOY_OUTPUT_GCS_PATH/results.json

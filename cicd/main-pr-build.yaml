@@ -44,7 +44,7 @@ steps:
     echo "Setting env variables..."
     export PACKAGE=$(cat /workspace/env_package.txt)
     export PIPELINE=$(cat /workspace/env_pipeline.txt)
-    gcloud deploy releases create ${_HEAD_BRANCH}-pr-${_PR_NUMBER} --project=${PROJECT_ID} --region=${_REGION} --delivery-pipeline=oms-targets-pipeline --deploy-parameters=customTarget/registryProject=${PROJECT},customTarget/registryLocation=${_REGION},customTarget/registryPackage=${PACKAGE},customTarget/registryRepository=${REPO_NAME},customTarget/pipelineVersion=branch:${_HEAD_BRANCH} --disable-initial-rollout
+    gcloud deploy releases create ${_HEAD_BRANCH}-pr-${_PR_NUMBER} --project=${PROJECT_ID} --region=${_REGION} --delivery-pipeline=oms-targets-pipeline --deploy-parameters=customTarget/registryProject=${PROJECT},customTarget/registryLocation=${_REGION},customTarget/registryPackage=${PACKAGE},customTarget/registryRepository=${REPO_NAME},customTarget/pipelineVersion=branch:${_HEAD_BRANCH} --skaffold-file=cicd/skaffold.yaml --disable-initial-rollout
 substitutions:
   _REGION: europe-west2
 options:
