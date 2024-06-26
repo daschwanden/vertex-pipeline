@@ -26,21 +26,29 @@ customActions:
     args:
       - '-c'
       - |-
+        gcloud artifacts tags list \
+          --project=${CLOUD_DEPLOY_customTarget_registryProject} \
+          --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
+          --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
+          --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
+          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineEnvironment}" | \
+          --format=yaml
         echo "-----------------------"
         tagExists=$(gcloud artifacts tags list \
           --project=${CLOUD_DEPLOY_customTarget_registryProject} \
           --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
           --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
           --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
-          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineEnvironment}" | \
-          grep VERSION | wc -l)
+          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineEnvironment}" \
+          --format=yaml | grep version | wc -l)
         echo "-----------------------"
         gcloud artifacts tags list \
           --project=${CLOUD_DEPLOY_customTarget_registryProject} \
           --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
           --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
           --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
-          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineVersion}"
+          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineVersion}" \
+          --format=yaml
         echo "-----------------------"
         version=$(gcloud artifacts tags list \
           --project=${CLOUD_DEPLOY_customTarget_registryProject} \
@@ -48,10 +56,10 @@ customActions:
           --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
           --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
           --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineVersion}" \
-          --format=yaml | grep version | sed "s/.*\/\(sha256:.*\)$/\1/"
+          --format=yaml | grep version | sed "s/.*\/\(sha256:.*\)$/\1/")
         echo "-----------------------"
         echo "tagExsits: ${tagExists}"
-        echo "versionSha: ${versionSha}"
+        echo "version: ${version}"
         echo "-----------------------"
         if [ $tagExists -eq 0 ]; then
           gcloud artifacts tags create ${CLOUD_DEPLOY_customTarget_pipelineEnvironment} \
