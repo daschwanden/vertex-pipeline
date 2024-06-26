@@ -39,8 +39,12 @@ compiled_name = "pipeline.yaml"
 source_sha256 = "source:"+sha256sum(source_name)
 signature_sha256 = "signature:"+hash_signature(signature)
 
-versions = client.list_versions(package)
 firstVersion = False
+versions = 0
+try:
+  client.list_versions(package)
+except:
+  print("no vesions yet for package: "+package)
 
 if len(versions) > 0:
   # In case we have existing versions of the pipeline make sure the signature has not changed
