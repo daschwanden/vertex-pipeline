@@ -9,7 +9,9 @@ def hello_world(text: str) -> str:
     print(text)
     return text
 
-@dsl.pipeline(name='hello-world', description='A simple intro pipeline')
+# --> Important: Name the pipeline the same as the directory it is stored in,
+#                otherwise your build will fail.
+@dsl.pipeline(name='hello-world-v2', description='A simple intro pipeline')
 def pipeline_hello_world(text: str = 'hi there, big world'):
     """Pipeline that passes small pipeline parameter string to consumer op."""
 
@@ -18,4 +20,6 @@ def pipeline_hello_world(text: str = 'hi there, big world'):
 
 compiler.Compiler().compile(
     pipeline_func=pipeline_hello_world,
-    package_path='hello_world_pipeline.yaml')
+    # --> Important: Don't change the package_path value to anything else,
+    #                otherwise your build will fail.
+    package_path='pipeline.yaml')
