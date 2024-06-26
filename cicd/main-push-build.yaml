@@ -28,7 +28,13 @@ steps:
     git fetch --depth=3
     echo "-------------------"
     echo "--> git show:"
-    git show --name-only --oneline $COMMIT_SHA
+    MSG=$(git show --name-only --oneline $COMMIT_SHA)
+    echo $MSG
+    BRANCH=echo $MSG | sed "s/.*from.*\/\(.*\)$/\1/"
+    PR=echo $MSG | sed "s/.*Merge pull request #\(.*\) from.*/\1/"
+    echo "BRANCH: ${BRANCH}"
+    echo "PR: ${PR}"
+    gcloud deploy releases promote --release=${BRANCH}-pr-${PR}--delivery-pipeline=oms-targets-pipeline --region=${_REGION} --to-target=master-stable-env
     echo "-------------------"
 substitutions:
   _REGION: europe-west2
