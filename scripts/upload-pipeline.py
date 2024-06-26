@@ -40,7 +40,7 @@ source_sha256 = "source:"+sha256sum(source_name)
 signature_sha256 = "signature:"+hash_signature(signature)
 
 firstVersion = False
-versions = 0
+versions = []
 try:
   client.list_versions(package)
 except:
