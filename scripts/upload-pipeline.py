@@ -42,7 +42,7 @@ signature_sha256 = "signature:"+hash_signature(signature)
 firstVersion = False
 versions = []
 try:
-  client.list_versions(package)
+  versions = client.list_versions(package)
 except:
   print("no vesions yet for package: "+package)
 
