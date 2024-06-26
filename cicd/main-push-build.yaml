@@ -30,7 +30,7 @@ steps:
     echo "--> git show:"
     MSG=$(git show --name-only --oneline $COMMIT_SHA)
     echo $MSG
-    BRANCH=${echo $MSG | sed "s/.*from.*\/\(.*\)$/\1/")
+    BRANCH=$(echo $MSG | sed "s/.*from.*\/\(.*\)$/\1/")
     PR=$(echo $MSG | sed "s/.*Merge pull request #\(.*\) from.*/\1/")
     echo "BRANCH: ${BRANCH}"
     echo "PR: ${PR}"
