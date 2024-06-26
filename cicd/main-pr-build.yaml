@@ -16,6 +16,9 @@ steps:
   script: |
     #!/bin/bash
     echo "-------------------"
+    echo "--> git fetch:"
+    git fetch --depth=2
+    echo "-------------------"
     echo "--> git show:"
     git show --name-only --oneline $COMMIT_SHA
     echo "-------------------"
