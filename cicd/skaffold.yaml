@@ -26,6 +26,7 @@ customActions:
     args:
       - '-c'
       - |-
+        echo "-----------------------"
         tagExists=$(gcloud artifacts tags list \
           --project=${CLOUD_DEPLOY_customTarget_registryProject} \
           --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
@@ -33,6 +34,14 @@ customActions:
           --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
           --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineEnvironment}" | \
           grep VERSION | wc -l)
+        echo "-----------------------"
+        gcloud artifacts tags list \
+          --project=${CLOUD_DEPLOY_customTarget_registryProject} \
+          --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
+          --repository=${CLOUD_DEPLOY_customTarget_registryRepository} \
+          --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
+          --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineVersion}"
+        echo "-----------------------"
         versionSha=$(gcloud artifacts tags list \
           --project=${CLOUD_DEPLOY_customTarget_registryProject} \
           --package=${CLOUD_DEPLOY_customTarget_registryPackage} \
@@ -40,8 +49,10 @@ customActions:
           --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
           --filter="TAG:${CLOUD_DEPLOY_customTarget_pipelineVersion}" | \
           grep VERSION | cut -d ' ' -f 2)
+        echo "-----------------------"
         echo "tagExsits: ${tagExists}"
         echo "versionSha: ${versionSha}"
+        echo "-----------------------"
         if [ $tagExists -eq 0 ]; then
           gcloud artifacts tags create ${CLOUD_DEPLOY_customTarget_pipelineEnvironment} \
             --project=${CLOUD_DEPLOY_customTarget_registryProject} \
@@ -57,5 +68,7 @@ customActions:
             --location=${CLOUD_DEPLOY_customTarget_registryLocation} \
             --version=${versionSha}
         fi
+        echo "-----------------------"
         echo {\"resultStatus\": \"SUCCEEDED\"} > results.json
         gsutil cp results.json $CLOUD_DEPLOY_OUTPUT_GCS_PATH/results.json
+        echo "-----------------------"
