@@ -15,7 +15,7 @@ def hello_world(text: str) -> str:
 def pipeline_hello_world(text: str = ''):
     """Pipeline that passes small pipeline parameter string to consumer op."""
 
-    text = 'Hi, new world.'
+    text = 'Hi, new world in Oxa OMS.'
     consume_task = hello_world(
         text=text)  # Passing pipeline parameter as argument to consumer op
 
